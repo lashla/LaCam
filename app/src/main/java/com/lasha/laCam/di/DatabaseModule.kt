@@ -19,7 +19,7 @@ object DatabaseModule {
 
     @Provides
     fun provideGalleyDao(@ApplicationContext appContext: Context): GalleryDao {
-        return GalleryDataBase.getInstance(appContext).galleryDao
+        return GalleryDataBase.getInstance(appContext)!!.galleryDao()
     }
 
     @Provides

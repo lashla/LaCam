@@ -20,7 +20,7 @@ class CameraViewModel @Inject constructor(private val repository: MainRepository
     }
     private suspend fun insertDataIntoDatabase(filePath: String, fileName: String){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPhotoData(Photo(filePath,fileName))
+            repository.insertPhotoData(Photo(0,filePath,fileName))
         }
     }
 
