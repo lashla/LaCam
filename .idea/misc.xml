@@ -5,8 +5,9 @@
       <map>
         <entry key="app/src/main/res/drawable/capture_circle.xml" value="0.195" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.3335" />
-        <entry key="app/src/main/res/layout/camera_fragment.xml" value="0.75" />
-        <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.40069484655471915" />
+        <entry key="app/src/main/res/layout/camera_fragment.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/db_view.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.33" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.19791666666666666" />
       </map>
     </option>

@@ -15,14 +15,14 @@ import kotlinx.coroutines.flow.Flow
 interface GalleryDao{
 
     @Query("SELECT * FROM photos")
-    suspend fun getAll(): List<Photo>
+    fun getAll(): List<Photo>
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE, entity = Photo::class)
-    suspend fun insert(photo: Photo)
+    fun insert(photo: Photo)
 
 
     @Query("SELECT * FROM photos ORDER BY file_name ASC")
-    suspend fun getDateSortedPhotos(): Flow<List<Photo>>
+    fun getDateSortedPhotos(): Flow<List<Photo>>
 }
 

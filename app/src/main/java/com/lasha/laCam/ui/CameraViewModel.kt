@@ -1,6 +1,7 @@
 package com.lasha.laCam.ui
 
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.room.Room
 import com.lasha.laCam.data.model.Photo
@@ -27,6 +28,7 @@ class CameraViewModel @Inject constructor(private val repository: MainRepository
     fun getData() {
         viewModelScope.launch(Dispatchers.Main) {
             allPhotos = repository.fetchSortedPhotos().asLiveData() as MutableLiveData<List<Photo>>
+
         }
     }
 }

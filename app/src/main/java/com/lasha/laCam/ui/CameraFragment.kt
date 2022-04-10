@@ -19,12 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.lasha.laCam.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.camera_fragment.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.Duration.Companion.minutes
 
 
 @AndroidEntryPoint
@@ -36,12 +38,14 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
     private lateinit var filePath: String
     private lateinit var imgFile: File
 
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
         checkPermissions()
         setupCaptureImageButton()
+        setupGalleryBtn()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -118,8 +122,8 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
             if (it.isNotEmpty()){
                 val lastIndex = it.lastIndex
                 imgFile = File("${it[lastIndex-1]}/${it[lastIndex]}")
+                Log.i("TAG", imgFile.toString())
                 val imgBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                galleryView.setImageBitmap(imgBitmap)
             }
         }
     }
@@ -143,11 +147,20 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    add(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }.toTypedArray()
+    }
+    private fun setupGalleryBtn(){
+        galleryView.setOnClickListener {
+            Navigation.findNavController(requireView()).navigate(R.id.action_cameraFragment_to_galleryFragment)
+        }
     }
 }
