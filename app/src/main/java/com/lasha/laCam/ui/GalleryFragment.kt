@@ -16,12 +16,11 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 @AndroidEntryPoint
 class GalleryFragment: Fragment(R.layout.fragment_gallery) {
 
-    private lateinit var viewModel: GalleryViewModel
+    private lateinit var viewModel: CameraViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[GalleryViewModel::class.java]
-        viewModel.getData()
+        viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
         Log.i("MEWO", viewModel.toString())
         initRecyclerView()
         setupBackBtn()
@@ -31,10 +30,10 @@ class GalleryFragment: Fragment(R.layout.fragment_gallery) {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         var data = listOf<Photo>()
         viewModel.allPhotos.observe(viewLifecycleOwner){
-            if (it.isNotEmpty()){
-                data = listOf(it[1])
+            if (!it.isNullOrEmpty()){
+                data = it
             } else {
-                Log.i("Recucler", "LiveData is somehow empty")
+                Log.i("RecyclerGallery", "Data either null or empty")
             }
         }
         Log.i("Recycler", data.toString())

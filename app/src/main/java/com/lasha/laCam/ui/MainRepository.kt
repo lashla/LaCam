@@ -9,7 +9,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 class MainRepository @Inject  constructor(private val galleryDao: GalleryDao){
-    fun  insertPhotoData(photo: Photo) = galleryDao.insert(photo)
-
-    fun  fetchSortedPhotos() = galleryDao.getDateSortedPhotos()
+    suspend fun  insertPhotoData(photo: Photo) = galleryDao.insert(photo)
+    val allWords: Flow<List<Photo>> = galleryDao.getDateSortedPhotos()
 }

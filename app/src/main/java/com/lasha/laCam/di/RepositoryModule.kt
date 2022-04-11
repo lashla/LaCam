@@ -1,11 +1,14 @@
 package com.lasha.laCam.di
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lasha.laCam.data.db.GalleryDataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
 @Module
@@ -13,8 +16,9 @@ import javax.inject.Singleton
 class RepositoryModule {
 
 
-    @Singleton
+    @Volatile
     private var INSTANCE: GalleryDataBase? = null
+
     fun getInstance(context: Context): GalleryDataBase? {
         if(INSTANCE == null){
             synchronized(GalleryDataBase::class){

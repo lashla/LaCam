@@ -9,5 +9,6 @@ import com.lasha.laCam.data.model.Photo
 @Database(entities = [Photo::class], version = 1, exportSchema = false)
 abstract class GalleryDataBase: RoomDatabase() {
     abstract fun galleryDao(): GalleryDao
+
 }
 

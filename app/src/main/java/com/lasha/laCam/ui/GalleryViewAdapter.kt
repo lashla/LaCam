@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lasha.laCam.R
 import com.lasha.laCam.data.model.Photo
@@ -36,4 +37,5 @@ class GalleryViewAdapter@Inject constructor(private val context: Context, privat
         val filePath: TextView = itemView.findViewById(R.id.filePath)
 
     }
+
 }
