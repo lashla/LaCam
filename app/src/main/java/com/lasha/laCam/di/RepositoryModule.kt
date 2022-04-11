@@ -1,5 +1,6 @@
 package com.lasha.laCam.di
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -26,7 +27,9 @@ class RepositoryModule {
                     context.applicationContext,
                     GalleryDataBase::class.java,
                     "mydb"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
+                Log.i("RepositoryModule", "$INSTANCE, build")
             }
         }
         fun destroyInstance() {

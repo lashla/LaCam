@@ -17,10 +17,8 @@ interface GalleryDao{
     @Query("SELECT * FROM photos")
     fun getAll(): Flow<List<Photo>>
 
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE, entity = Photo::class)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(photo: Photo)
-
 
     @Query("SELECT * FROM photos ORDER BY file_name ASC")
     fun getDateSortedPhotos(): Flow<List<Photo>>

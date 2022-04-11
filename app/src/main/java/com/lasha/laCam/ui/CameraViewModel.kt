@@ -7,12 +7,14 @@ import androidx.room.Room
 import com.lasha.laCam.data.model.Photo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(private val repository: MainRepository): ViewModel(){
 
-    val allPhotos: MutableLiveData<List<Photo>> = repository.allWords.asLiveData() as MutableLiveData<List<Photo>>
+
     fun insertHandler(filePath: String, fileName: String){
         viewModelScope.launch {
             insertDataIntoDatabase(filePath, fileName)
@@ -20,9 +22,21 @@ class CameraViewModel @Inject constructor(private val repository: MainRepository
     }
     private suspend fun insertDataIntoDatabase(filePath: String, fileName: String){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPhotoData(Photo(0,filePath,fileName))
-            Log.i("Insert", Photo(0,filePath,fileName).toString())
+            repository.insertPhotoData(Photo(filePath,fileName))
+            Log.i("Insert", Photo(filePath,fileName).toString())
         }
     }
+    var allPhotos = MutableLiveData<List<Photo>>()
+    fun observe(){
+        viewModelScope.launch {
+            repository.allWords.collect {
+                if (it.isNotEmpty()){
+                    allPhotos.value = it
+                    Log.i("AllPhotosData", allPhotos.value.toString())
+                }
+            }
+        }
+    }
+
 
 }

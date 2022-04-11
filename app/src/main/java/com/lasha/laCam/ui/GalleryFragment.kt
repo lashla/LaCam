@@ -28,10 +28,15 @@ class GalleryFragment: Fragment(R.layout.fragment_gallery) {
 
     private fun initRecyclerView(){
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        var data = listOf<Photo>()
+        val data = ArrayList<Photo>()
+        viewModel.observe()
         viewModel.allPhotos.observe(viewLifecycleOwner){
-            if (!it.isNullOrEmpty()){
-                data = it
+            if (it.isNotEmpty()){
+                for (element in 0..it.lastIndex)
+                {
+                    data.add(it[element])
+
+                }
             } else {
                 Log.i("RecyclerGallery", "Data either null or empty")
             }

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.lasha.laCam.data.model.Photo
 
-@Database(entities = [Photo::class], version = 1, exportSchema = false)
+@Database(entities = [Photo::class], version = 2, exportSchema = false)
 abstract class GalleryDataBase: RoomDatabase() {
     abstract fun galleryDao(): GalleryDao
 

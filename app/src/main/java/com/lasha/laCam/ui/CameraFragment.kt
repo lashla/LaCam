@@ -36,10 +36,7 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
     private var imageCapture: ImageCapture? = null
     private lateinit var fileName: String
     private lateinit var filePath: String
-    private lateinit var imgFile: File
 
-
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
@@ -48,7 +45,6 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
         setupGalleryBtn()
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun setupCaptureImageButton(){
         captureImage.setOnClickListener {
             takePhoto()
@@ -87,9 +83,7 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
-                put(MediaStore.MediaColumns.RELATIVE_PATH, path)
-            }
+            put(MediaStore.MediaColumns.RELATIVE_PATH, path)
         }
         filePath = MediaStore.MediaColumns.RELATIVE_PATH + "/Pictures/LasCam-Images"
         val outputOptions = ImageCapture.OutputFileOptions
@@ -109,22 +103,10 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val msg = "Photo capture succeeded: ${outputFileResults.savedUri}"
                     viewModel.insertHandler(filePath,fileName)
-                    showLastPhoto()
                     Log.d(TAG, msg)
                 }
             }
         )
-    }
-
-    private fun showLastPhoto(){
-        viewModel.allPhotos.observe(viewLifecycleOwner){
-            if (it.isNotEmpty()){
-                val lastIndex = it.lastIndex
-                imgFile = File("${it[lastIndex-1]}/${it[lastIndex]}")
-                Log.i("TAG", imgFile.toString())
-                val imgBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-            }
-        }
     }
 
     private fun checkPermissions(){
@@ -150,11 +132,6 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ).apply {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    add(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }
             }.toTypedArray()
     }
     private fun setupGalleryBtn(){
