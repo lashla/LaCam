@@ -16,6 +16,7 @@ import com.lasha.laCam.R
 import com.lasha.laCam.data.model.Photo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gallery.*
+import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class GalleryFragment: Fragment(R.layout.fragment_gallery) {
@@ -27,12 +28,13 @@ class GalleryFragment: Fragment(R.layout.fragment_gallery) {
         viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
         Log.i("MEWO", viewModel.toString())
         initData()
-        checkPermissions()
+//        checkPermissions()
         setupBackBtn()
+        initRecyclerView(data)
     }
 
     private fun initData(){
-        viewModel.observe()
+        viewModel.getPhotoData()
         viewModel.allPhotos.observe(viewLifecycleOwner){
             if (it.isNotEmpty()){
                 for (element in 0..it.lastIndex)
@@ -40,10 +42,10 @@ class GalleryFragment: Fragment(R.layout.fragment_gallery) {
                     data.add(it[element])
                 }
             } else {
-                Log.i(TAG, "Data either null or empty")
+                Log.i("AA", "Data either null or empty")
             }
         }
-        Log.i(TAG, data.toString())
+        Log.i("AA", data.toString())
     }
 
     private fun setupBackBtn(){
@@ -53,32 +55,33 @@ class GalleryFragment: Fragment(R.layout.fragment_gallery) {
     }
 
     private fun initRecyclerView(data: ArrayList<Photo>){
+
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val adapter = GalleryViewAdapter(requireContext(), data)
         recyclerView.adapter = adapter
     }
 
-    private fun checkPermissions(){
-        if (!allPermissionsGranted()){
-            ActivityCompat.requestPermissions(requireActivity(),
-                arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS
-            );
-        } else {
-            initRecyclerView(data)
-        }
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_GALLERY_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            requireContext(), it) == PackageManager.PERMISSION_GRANTED
-    }
-    companion object {
-        private const val TAG = "Gallery"
-        private const val REQUEST_CODE_PERMISSIONS = 101
-        private val REQUIRED_GALLERY_PERMISSIONS =
-            mutableListOf (
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ).apply {
-            }.toTypedArray()
-    }
+//    private fun checkPermissions(){
+//        if (!allPermissionsGranted()){
+//            ActivityCompat.requestPermissions(requireActivity(),
+//                arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS
+//            );
+//        } else {
+//
+//        }
+//    }
+//
+//    private fun allPermissionsGranted() = REQUIRED_GALLERY_PERMISSIONS.all {
+//        ContextCompat.checkSelfPermission(
+//            requireContext(), it) == PackageManager.PERMISSION_GRANTED
+//    }
+//    companion object {
+//        private const val TAG = "Gallery"
+//        private const val REQUEST_CODE_PERMISSIONS = 101
+//        private val REQUIRED_GALLERY_PERMISSIONS =
+//            mutableListOf (
+//                Manifest.permission.READ_EXTERNAL_STORAGE
+//            ).apply {
+//            }.toTypedArray()
+//    }
 }

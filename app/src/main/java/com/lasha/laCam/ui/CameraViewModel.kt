@@ -27,7 +27,7 @@ class CameraViewModel @Inject constructor(private val repository: MainRepository
         }
     }
     var allPhotos = MutableLiveData<List<Photo>>()
-    fun observe(){
+    fun getPhotoData(){
         viewModelScope.launch {
             repository.allWords.collect {
                 if (it.isNotEmpty()){
