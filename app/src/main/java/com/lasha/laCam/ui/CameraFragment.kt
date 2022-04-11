@@ -102,8 +102,8 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
 
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val msg = "Photo capture succeeded: ${outputFileResults.savedUri}"
-                    viewModel.insertHandler(filePath,fileName)
-                    Log.d(TAG, msg)
+                    viewModel.insertHandler(filePath,fileName, outputFileResults.savedUri.toString())
+                    Log.d("insesrtion", msg)
                 }
             }
         )

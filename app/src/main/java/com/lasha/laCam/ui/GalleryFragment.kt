@@ -1,9 +1,13 @@
 package com.lasha.laCam.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -17,38 +21,64 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 class GalleryFragment: Fragment(R.layout.fragment_gallery) {
 
     private lateinit var viewModel: CameraViewModel
-
+    private val data = ArrayList<Photo>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
         Log.i("MEWO", viewModel.toString())
-        initRecyclerView()
+        initData()
+        checkPermissions()
         setupBackBtn()
     }
 
-    private fun initRecyclerView(){
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        val data = ArrayList<Photo>()
+    private fun initData(){
         viewModel.observe()
         viewModel.allPhotos.observe(viewLifecycleOwner){
             if (it.isNotEmpty()){
                 for (element in 0..it.lastIndex)
                 {
                     data.add(it[element])
-
                 }
             } else {
-                Log.i("RecyclerGallery", "Data either null or empty")
+                Log.i(TAG, "Data either null or empty")
             }
         }
-        Log.i("Recycler", data.toString())
-        val adapter = GalleryViewAdapter(requireContext(), data)
-        recyclerView.adapter = adapter
+        Log.i(TAG, data.toString())
     }
 
     private fun setupBackBtn(){
         backToCameraBtn.setOnClickListener {
             Navigation.findNavController(requireView()).navigate(R.id.action_galleryFragment_to_cameraFragment)
         }
+    }
+
+    private fun initRecyclerView(data: ArrayList<Photo>){
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val adapter = GalleryViewAdapter(requireContext(), data)
+        recyclerView.adapter = adapter
+    }
+
+    private fun checkPermissions(){
+        if (!allPermissionsGranted()){
+            ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS
+            );
+        } else {
+            initRecyclerView(data)
+        }
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_GALLERY_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+    companion object {
+        private const val TAG = "Gallery"
+        private const val REQUEST_CODE_PERMISSIONS = 101
+        private val REQUIRED_GALLERY_PERMISSIONS =
+            mutableListOf (
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ).apply {
+            }.toTypedArray()
     }
 }

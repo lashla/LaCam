@@ -8,5 +8,6 @@ import java.io.File
 @Entity(tableName = "photos")
 data class Photo(
     @ColumnInfo(name = "file_path")val filePath: String,
-    @PrimaryKey @ColumnInfo(name = "file_name")val fileName: String
+    @PrimaryKey @ColumnInfo(name = "file_name")val fileName: String,
+    @ColumnInfo(name = "file_uri") val fileUri: String
 )

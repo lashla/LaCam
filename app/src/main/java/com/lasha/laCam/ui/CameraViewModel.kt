@@ -15,15 +15,15 @@ import javax.inject.Inject
 class CameraViewModel @Inject constructor(private val repository: MainRepository): ViewModel(){
 
 
-    fun insertHandler(filePath: String, fileName: String){
+    fun insertHandler(filePath: String, fileName: String, fileUri: String){
         viewModelScope.launch {
-            insertDataIntoDatabase(filePath, fileName)
+            insertDataIntoDatabase(filePath, fileName, fileUri)
         }
     }
-    private suspend fun insertDataIntoDatabase(filePath: String, fileName: String){
+    private suspend fun insertDataIntoDatabase(filePath: String, fileName: String, fileUri: String){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPhotoData(Photo(filePath,fileName))
-            Log.i("Insert", Photo(filePath,fileName).toString())
+            repository.insertPhotoData(Photo(filePath,fileName, fileUri))
+            Log.i("Insert", Photo(filePath,fileName, fileUri).toString())
         }
     }
     var allPhotos = MutableLiveData<List<Photo>>()

@@ -1,6 +1,7 @@
 package com.lasha.laCam.ui
 
 import android.content.Context
+import android.net.Uri
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +32,7 @@ class GalleryViewAdapter@Inject constructor(private val context: Context, privat
         holder.fileName.text = ItemsViewModel.fileName
         holder.filePath.text = ItemsViewModel.filePath
         Picasso.get()
-            .load(File("${ItemsViewModel.filePath}/${ItemsViewModel.fileName}.jpg"))
+            .load(ItemsViewModel.fileUri)
             .error(com.google.android.material.R.drawable.abc_btn_check_material)
             .into(holder.imageView)
         Log.i("ImagePath:","${ItemsViewModel.filePath}/${ItemsViewModel.fileName}.jpg")
