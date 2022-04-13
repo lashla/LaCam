@@ -1,9 +1,8 @@
-package com.lasha.laCam.ui
+package com.lasha.laCam.ui.camera
 
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -23,10 +22,8 @@ import androidx.navigation.Navigation
 import com.lasha.laCam.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.camera_fragment.*
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration.Companion.minutes
 
 
 @AndroidEntryPoint
@@ -36,7 +33,6 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
     private var imageCapture: ImageCapture? = null
     private lateinit var fileName: String
     private lateinit var filePath: String
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
@@ -45,10 +41,18 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
         setupGalleryBtn()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        pauseCamera()
+    }
     private fun setupCaptureImageButton(){
         captureImage.setOnClickListener {
             takePhoto()
         }
+    }
+
+    private fun pauseCamera(){
+
     }
 
     private fun startCamera(){
@@ -62,10 +66,10 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
                 .also {
                     it.setSurfaceProvider(previewView.surfaceProvider)
                 }
+
             imageCapture = ImageCapture.Builder().build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
@@ -73,9 +77,9 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
                 Log.e(TAG, "Use case bind failed", e)
             }
         }, ContextCompat.getMainExecutor(requireContext()))
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun takePhoto() {
         fileName = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
@@ -112,7 +116,8 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
     private fun checkPermissions(){
         if (!allPermissionsGranted()){
             ActivityCompat.requestPermissions(requireActivity(),
-                arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS);
+                arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS
+            );
         } else {
             startCamera()
         }

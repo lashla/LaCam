@@ -1,10 +1,10 @@
 package com.lasha.laCam
 
 import android.app.Application
-import androidx.room.Room
-import com.lasha.laCam.data.db.GalleryDataBase
-import com.lasha.laCam.di.RepositoryModule
-import com.lasha.laCam.ui.MainRepository
+import com.lasha.laCam.data.repository.RoomRepositoryImpl
+import com.lasha.laCam.domain.db.GalleryDataBase
+import com.lasha.laCam.domain.di.DatabaseModule
+import com.lasha.laCam.domain.repository.RoomRepository
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -14,6 +14,6 @@ class CameraApplication: Application() {
 
     val applicationScope = CoroutineScope(SupervisorJob())
 
-    val database by lazy { RepositoryModule().getInstance(this) }
-    val repository by lazy { MainRepository(database!!.galleryDao()) }
+    val database by lazy { DatabaseModule.provideGalleryDAO(DatabaseModule.provideDatabase(applicationContext))}
+    val repository by lazy { RoomRepositoryImpl(database) }
 }

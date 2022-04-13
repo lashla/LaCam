@@ -1,4 +1,4 @@
-package com.lasha.laCam.data.db
+package com.lasha.laCam.domain.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.Flow
 interface GalleryDao{
 
     @Query("SELECT * FROM photos")
-    fun getAll(): Flow<List<Photo>>
+    suspend fun getAll(): List<Photo>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(photo: Photo)
 
     @Query("SELECT * FROM photos ORDER BY file_name ASC")
-    fun getDateSortedPhotos(): Flow<List<Photo>>
+    suspend fun getDateSortedPhotos(): List<Photo>
 }
 

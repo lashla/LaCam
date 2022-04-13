@@ -1,23 +1,19 @@
-package com.lasha.laCam.ui
+package com.lasha.laCam.ui.gallery
 
-import android.content.Context
-import android.net.Uri
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lasha.laCam.R
 import com.lasha.laCam.data.model.Photo
 import com.squareup.picasso.Picasso
-import java.io.File
 import javax.inject.Inject
 
-class GalleryViewAdapter@Inject constructor(private val context: Context, private val mList: List<Photo>): RecyclerView.Adapter<GalleryViewAdapter.ViewHolder>() {
+class GalleryViewAdapter @Inject constructor(): RecyclerView.Adapter<GalleryViewAdapter.ViewHolder>() {
+    private var dbList = ArrayList<Photo>()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -27,8 +23,13 @@ class GalleryViewAdapter@Inject constructor(private val context: Context, privat
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GalleryViewAdapter.ViewHolder, position: Int) {
-        val ItemsViewModel = mList[position]
+    fun updateGalleryInfo(newInfo: ArrayList<Photo>){
+        dbList = newInfo
+        notifyDataSetChanged()
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val ItemsViewModel = dbList[position]
         holder.fileName.text = ItemsViewModel.fileName
         holder.filePath.text = ItemsViewModel.filePath
         Picasso.get()
@@ -39,7 +40,7 @@ class GalleryViewAdapter@Inject constructor(private val context: Context, privat
     }
 
     override fun getItemCount(): Int {
-        return mList.size
+        return dbList.size
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
