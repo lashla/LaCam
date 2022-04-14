@@ -33,6 +33,7 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
     private var imageCapture: ImageCapture? = null
     private lateinit var fileName: String
     private lateinit var filePath: String
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[CameraViewModel::class.java]
@@ -41,19 +42,16 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
         setupGalleryBtn()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        pauseCamera()
-    }
+
+
+
     private fun setupCaptureImageButton(){
         captureImage.setOnClickListener {
             takePhoto()
         }
     }
 
-    private fun pauseCamera(){
 
-    }
 
     private fun startCamera(){
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
@@ -107,7 +105,7 @@ class CameraFragment  : Fragment(R.layout.camera_fragment) {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val msg = "Photo capture succeeded: ${outputFileResults.savedUri}"
                     viewModel.insertHandler(filePath,fileName, outputFileResults.savedUri.toString())
-                    Log.d("insesrtion", msg)
+                    Log.d(TAG, msg)
                 }
             }
         )

@@ -12,7 +12,7 @@ import com.lasha.laCam.data.model.Photo
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
-class GalleryViewAdapter @Inject constructor(): RecyclerView.Adapter<GalleryViewAdapter.ViewHolder>() {
+class GalleryViewAdapter: RecyclerView.Adapter<GalleryViewAdapter.ViewHolder>() {
     private var dbList = ArrayList<Photo>()
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,6 +35,8 @@ class GalleryViewAdapter @Inject constructor(): RecyclerView.Adapter<GalleryView
         Picasso.get()
             .load(ItemsViewModel.fileUri)
             .error(com.google.android.material.R.drawable.abc_btn_check_material)
+            .resize(300,400)
+            .centerCrop()
             .into(holder.imageView)
         Log.i("ImagePath:","${ItemsViewModel.filePath}/${ItemsViewModel.fileName}.jpg")
     }
